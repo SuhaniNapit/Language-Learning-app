@@ -3,56 +3,63 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f4f8; /* Light background color */
-    color: #333; /* Dark text color */
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
+    color: #fff; /* White text color */
 }
 
 h1 {
     text-align: center;
-    color: #4a90e2; /* Primary color for headings */
+    color: #fff; /* White color for main title */
     margin-bottom: 20px;
+    font-size: 2.5em; /* Larger font size */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Shadow for better visibility */
 }
 
 h2 {
-    color: #333;
-}
-
-nav {
-    background-color: #4a90e2; /* Navigation background color */
-    padding: 10px 0;
-    border-radius: 5px;
+    color: #50439e; /* White color for section titles */
+    text-align: center; /* Center align section titles */
     margin-bottom: 20px;
 }
 
-nav ul {
+.layout {
+    display: flex; /* Use flexbox for layout */
+}
+
+.sidebar {
+    width: 250px; /* Fixed width for sidebar */
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    padding: 20px;
+    border-radius: 5px;
+    height: 100vh; /* Full height */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Shadow for sidebar */
+}
+
+.sidebar ul {
     list-style-type: none;
     padding: 0;
-    text-align: center; /* Center the navigation links */
 }
 
-nav ul li {
-    display: inline;
-    margin-right: 20px;
+.sidebar ul li {
+    margin-bottom: 15px;
 }
 
-nav ul li a {
+.sidebar ul li a {
     text-decoration: none;
-    color: white; /* White text for links */
+    color: #ffcc00; /* Gold color for links */
     font-weight: bold; /* Bold links */
     transition: color 0.3s; /* Smooth transition for hover effect */
 }
 
-nav ul li a:hover {
-    color: #ffcc00; /* Change color on hover */
+.sidebar ul li a:hover {
+    color: #fff; /* Change color on hover */
 }
 
-.container {
-    max-width: 800px; /* Limit the width of the content */
-    margin: 0 auto; /* Center the container */
+.content {
+    flex: 1; /* Take the remaining space */
     padding: 20px;
-    background: white; /* White background for content */
+    background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background for content */
     border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
 }
 
 textarea {
@@ -68,7 +75,7 @@ textarea {
 button {
     margin-top: 10px;
     padding: 10px 15px;
-    background-color: #5cb85c; /* Green button */
+    background-color: #ff5722; /* Vibrant button color */
     color: white;
     border: none;
     border-radius: 4px; /* Rounded corners */
@@ -78,7 +85,7 @@ button {
 }
 
 button:hover {
-    background-color: #4cae4c; /* Darker green on hover */
+    background-color: #e64a19; /* Darker shade on hover */
 }
 
 .translator, .vocabulary-practice, .study-room, .chatbot {
@@ -87,4 +94,54 @@ button:hover {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+}
+
+.component-title {
+    font-size: 1.8em; /* Title size for components */
+    color: #4a90e2; /* Title color */
+    margin-bottom: 10px;
+    text-align: center; /* Center align component titles */
+}
+
+.component-image {
+    width: 50px; /* Set a smaller width */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 5px; /* Rounded corners for images */
+    margin-bottom: 10px; /* Space below the image */
+}
+
+.App {
+    text-align: center;
+}
+
+header {
+    display: flex;
+    justify-content: space-between; /* Space between title and button */
+    align-items: center;
+    padding: 10px 20px;
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
+    color: white;
+}
+
+header h1 {
+    margin: 0; /* Remove default margin */
+}
+
+.get-started-button {
+    background-color: #fff; /* Button background color */
+    color: #4a90e2; /* Button text color */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; /* Remove underline */
+}
+
+.home-page {
+    padding: 20px;
+    color: #333; /* Dark text color for visibility */
+}
+
+.dashboard {
+    padding: 20px;
 }

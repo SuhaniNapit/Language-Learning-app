@@ -1,0 +1,15 @@
+/* src/components/Footer.css */
+.footer {
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
+    color: white; /* Text color */
+    text-align: center; /* Center align text */
+    padding: 20px; /* Padding for the footer */
+    position: relative; /* Positioning */
+    bottom: 0; /* Stick to the bottom */
+    width: 100%; /* Full width */
+}
+
+.footer-content {
+    max-width: 800px; /* Max width for content */
+    margin: 0 auto; /* Center the content */
+}

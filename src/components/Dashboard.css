@@ -1,0 +1,11 @@
+.dashboard {
+    text-align: center; /* Center align the content */
+    padding: 20px; /* Add some padding */
+}
+
+.progress {
+    background: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+    padding: 20px; /* Padding for the progress box */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}

@@ -1,0 +1,23 @@
+.home-page {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between description and image */
+    align-items: center; /* Center align items vertically */
+    padding: 20px;
+}
+
+.description {
+    flex: 1; /* Allow the description to take available space */
+    text-align: left; /* Align text to the left */
+    color: #333; /* Dark text color for visibility */
+}
+
+.image-container {
+    flex: 0 0 300px; /* Fixed width for the image container */
+    display: flex; /* Center the image */
+    justify-content: center; /* Center the image horizontally */
+}
+
+.language-image {
+    max-width: 100%; /* Responsive image */
+    height: auto; /* Maintain aspect ratio */
+}

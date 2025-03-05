@@ -1,0 +1,44 @@
+/* src/components/AuthForm.css */
+.auth-form {
+    max-width: 450px; /* Max width for the form */
+    margin: 0 auto; /* Center the form */
+    padding: 20px; /* Padding for the form */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    background: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.auth-form h2 {
+    text-align: center; /* Center align title */
+}
+
+.auth-form input {
+    width: 100%; /* Full width */
+    padding: 6px; /* Padding inside input */
+    margin: 10px 0; /* Space between inputs */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 4px; /* Rounded corners */
+}
+
+.auth-form button {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding inside button */
+    background-color: #4a90e2; /* Button color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+}
+
+.auth-form .oauth-buttons {
+    display: flex; /* Flexbox for buttons */
+    justify-content: space-between; /* Space between buttons */
+    margin-top: 10px; /* Space above buttons */
+}
+
+.auth-form p {
+    text-align: center; /* Center align text */
+    cursor: pointer; /* Pointer cursor */
+    color: #4a90e2; /* Link color */
+}

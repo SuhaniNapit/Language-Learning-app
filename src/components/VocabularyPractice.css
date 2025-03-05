@@ -1,0 +1,12 @@
+.vocabulary-practice {
+    text-align: center; /* Center align the content */
+    padding: 20px; /* Add some padding */
+}
+
+.vocabulary-image {
+    width: 100%; /* Set the width to 100% of the container */
+    max-width: 400px; /* Set a maximum width for the image */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 5px; /* Optional: add rounded corners */
+    margin-bottom: 20px; /* Space below the image */
+}
