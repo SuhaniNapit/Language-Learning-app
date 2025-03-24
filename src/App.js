@@ -1,5 +1,5 @@
 // src/App.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, Navigate, NavLink } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import AuthForm from './components/AuthForm';
@@ -12,33 +12,61 @@ import './styles.css';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ElfsightChatbot from './components/ElfsightChatbot';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import Profile from './components/Profile';
+
 
 // Create a separate component for the routes that need auth
 function AppRoutes() {
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, user, logout } = useAuth();
+
+    useEffect(() => {
+        const closeDropdown = (e) => {
+            if (!e.target.matches('.profile-icon')) {
+                const dropdown = document.getElementById('profile-dropdown');
+                if (dropdown && dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        };
+
+        document.addEventListener('click', closeDropdown);
+        return () => document.removeEventListener('click', closeDropdown);
+    }, []);
 
     return (
         <div className="App">
             <header>
                 <h1>LingoBuddy</h1>
-                {!isLoggedIn && (
-                    <Link to="/auth" className="get-started-button">Get Started</Link>
-                )}
+                <div className="header-right">
+                    {isLoggedIn ? (
+                        <div className="profile-menu">
+                            <div className="profile-icon" onClick={() => document.getElementById('profile-dropdown').classList.toggle('show')}>
+                                {user?.username?.charAt(0).toUpperCase() || 'U'}
+                            </div>
+                            <div id="profile-dropdown" className="dropdown-content">
+                                <Link to="/profile">My Profile</Link>
+                                <Link to="/dashboard">Dashboard</Link>
+                                <button onClick={logout}>Logout</button>
+                            </div>
+                        </div>
+                    ) : (
+                        <Link to="/auth" className="get-started-button">Get Started</Link>
+                    )}
+                </div>
             </header>
             <div className="layout">
                 <nav className="sidebar">
                     <ul>
                         <li><NavLink to="/" end>Home</NavLink></li>
                         {isLoggedIn ? (
-                            // Show these links only when user is logged in
                             <>
                                 <li><NavLink to="/dashboard">Dashboard</NavLink></li>
                                 <li><NavLink to="/translator">Translator</NavLink></li>
                                 <li><NavLink to="/vocabulary">Vocabulary Practice</NavLink></li>
                                 <li><NavLink to="/study-room">Study Room</NavLink></li>
+                                
                             </>
                         ) : (
-                            // Show these links when user is not logged in
                             <li><NavLink to="/auth">Login / Sign Up</NavLink></li>
                         )}
                     </ul>
@@ -47,10 +75,11 @@ function AppRoutes() {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/auth" element={<AuthForm />} />
-                        {/* Protected Routes */}
                         <Route 
                             path="/dashboard" 
-                            element={isLoggedIn ? <Dashboard /> : <Navigate to="/auth" />} 
+                            element={
+                                isLoggedIn ? <Dashboard /> : <Navigate to="/auth" />
+                            } 
                         />
                         <Route 
                             path="/translator" 
@@ -68,10 +97,16 @@ function AppRoutes() {
                             path="/chatbot" 
                             element={isLoggedIn ? <ElfsightChatbot /> : <Navigate to="/auth" />} 
                         />
+                        <Route 
+                            path="/profile" 
+                            element={isLoggedIn ? <Profile /> : <Navigate to="/auth" />} 
+                        />
+                        
                     </Routes>
                 </div>
             </div>
             <Footer />
+            <ElfsightChatbot />
         </div>
     );
 }

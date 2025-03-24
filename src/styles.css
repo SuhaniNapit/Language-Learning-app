@@ -1,9 +1,10 @@
 /* src/styles.css */
 body {
-    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
+    min-height: 100vh;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: #fff; /* White text color */
 }
 
@@ -22,16 +23,18 @@ h2 {
 }
 
 .layout {
-    display: flex; /* Use flexbox for layout */
+    flex: 1;
+    display: flex;
+    margin: 0;
+    padding: 0;
 }
 
 .sidebar {
-    width: 250px; /* Fixed width for sidebar */
-    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
-    padding: 20px;
-    border-radius: 5px;
-    height: 100vh; /* Full height */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Shadow for sidebar */
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    width: 250px;
+    height: 100vh;
+    backdrop-filter: blur(5px);
 }
 
 .sidebar ul {
@@ -45,21 +48,21 @@ h2 {
 
 .sidebar ul li a {
     text-decoration: none;
-    color: #ffcc00; /* Gold color for links */
-    font-weight: bold; /* Bold links */
-    transition: color 0.3s; /* Smooth transition for hover effect */
+    color: #fff;
+    opacity: 0.8;
+    transition: opacity 0.3s;
 }
 
 .sidebar ul li a:hover {
-    color: #fff; /* Change color on hover */
+    opacity: 1;
 }
 
 .content {
-    flex: 1; /* Take the remaining space */
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background for content */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    flex: 1;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    margin: 1rem;
 }
 
 textarea {
@@ -111,30 +114,39 @@ button:hover {
 }
 
 .App {
-    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
+    margin: 0;
+    padding: 1rem 2rem;
     display: flex;
-    justify-content: space-between; /* Space between title and button */
+    justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
-    background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
-    color: white;
 }
 
 header h1 {
-    margin: 0; /* Remove default margin */
+    margin: 0;
+    color: #fff; /* Keep the text white */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .get-started-button {
-    background-color: #fff; /* Button background color */
-    color: #4a90e2; /* Button text color */
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
     padding: 10px 20px;
-    border: none;
+    border: 2px solid rgba(255, 255, 255, 0.8);
     border-radius: 5px;
     cursor: pointer;
-    text-decoration: none; /* Remove underline */
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.get-started-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
 }
 
 .home-page {
@@ -144,4 +156,101 @@ header h1 {
 
 .dashboard {
     padding: 20px;
+}
+
+.header-right {
+    position: relative;
+}
+
+.profile-menu {
+    position: relative;
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.profile-icon:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background-color: rgba(255, 255, 255, 0.95);
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+.dropdown-content a,
+.dropdown-content button {
+    color: #50439e; /* Match your theme color */
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.dropdown-content a:hover,
+.dropdown-content button:hover {
+    background-color: rgba(106, 17, 203, 0.1); /* Subtle hover effect matching gradient */
+}
+
+.dropdown-content button {
+    color: #e74c3c;
+}
+
+/* Add this to close dropdown when clicking outside */
+@media (max-width: 768px) {
+    header {
+        padding: 1rem;
+    }
+    
+    .dropdown-content {
+        right: -10px;
+    }
+}
+
+/* Add these styles for the chatbot */
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* Ensure the chatbot doesn't overlap with other content */
+@media (max-width: 768px) {
+    .chatbot-container {
+        bottom: 10px;
+        right: 10px;
+    }
 }
