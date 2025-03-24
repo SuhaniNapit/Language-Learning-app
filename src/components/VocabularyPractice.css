@@ -4,9 +4,43 @@
 }
 
 .vocabulary-image {
-    width: 100%; /* Set the width to 100% of the container */
-    max-width: 400px; /* Set a maximum width for the image */
+    width: 100%; /* Adjust width as needed */
     height: auto; /* Maintain aspect ratio */
-    border-radius: 5px; /* Optional: add rounded corners */
     margin-bottom: 20px; /* Space below the image */
+}
+
+.vocabulary-practice-container {
+    width: 400px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #422c9a;
+    text-align: center;
+}
+
+.flashcard {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.buttons {
+    margin: 10px 0;
+}
+
+button {
+    margin: 5px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
 }

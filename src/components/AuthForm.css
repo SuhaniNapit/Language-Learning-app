@@ -1,12 +1,56 @@
 /* src/components/AuthForm.css */
 .auth-form {
-    max-width: 450px; /* Max width for the form */
-    margin: 0 auto; /* Center the form */
-    padding: 20px; /* Padding for the form */
-    border: 1px solid #ccc; /* Light border */
-    border-radius: 8px; /* Rounded corners */
-    background: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background-color: white;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: #dc3545;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.toggle-auth {
+    text-align: center;
+    color: #007bff;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.toggle-auth:hover {
+    text-decoration: underline;
 }
 
 .auth-form h2 {
@@ -41,4 +85,69 @@
     text-align: center; /* Center align text */
     cursor: pointer; /* Pointer cursor */
     color: #4a90e2; /* Link color */
+}
+
+.auth-divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background-color: #e0e0e0;
+}
+
+.auth-divider::before {
+    left: 0;
+}
+
+.auth-divider::after {
+    right: 0;
+}
+
+.auth-divider span {
+    background-color: white;
+    padding: 0 10px;
+    color: #757575;
+    font-size: 14px;
+}
+
+.google-auth-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Ensure the Google button itself is centered */
+.google-auth-container > div {
+    width: fit-content !important;
+}
+
+/* Add this to handle password mismatch error state */
+.form-group input.error {
+    border-color: #dc3545;
+}
+
+.form-group input.error:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.password-match-indicator {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    transition: color 0.2s;
+}
+
+.password-match-indicator.match {
+    color: #28a745;
+}
+
+.password-match-indicator.no-match {
+    color: #dc3545;
 }

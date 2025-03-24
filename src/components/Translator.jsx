@@ -4,20 +4,24 @@ import translatorImage from '../assets/translator.png'; // Ensure this is the co
 import './Translator.css'; // Import the CSS for the Translator component
 
 const Translator = () => {
-    const [text, setText] = useState('');
+    const [inputText, setInputText] = useState('');
     const [translatedText, setTranslatedText] = useState('');
+    const [error, setError] = useState('');
 
     const handleTranslate = async () => {
-        // Example API call (replace with actual translation API)
-        const response = await fetch('https://api.example.com/translate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text }),
-        });
-        const data = await response.json();
-        setTranslatedText(data.translatedText);
+        setError('');
+        try {
+            const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(inputText)}&langpair=en|es`);
+            
+            if (!response.ok) {
+                throw new Error('Translation failed');
+            }
+
+            const data = await response.json();
+            setTranslatedText(data.responseData.translatedText); // Set the translated text
+        } catch (err) {
+            setError(err.message); // Handle errors
+        }
     };
 
     return (
@@ -25,12 +29,18 @@ const Translator = () => {
             <h2 className="component-title">Translator</h2>
             <img src={translatorImage} alt="Translator" className="translator-image" />
             <textarea 
-                value={text} 
-                onChange={(e) => setText(e.target.value)} 
+                value={inputText} 
+                onChange={(e) => setInputText(e.target.value)} 
                 placeholder="Enter text to translate"
             />
             <button onClick={handleTranslate}>Translate</button>
-            <p>Translated Text: {translatedText}</p>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {translatedText && (
+                <div>
+                    <h2>Translated Text:</h2>
+                    <p>{translatedText}</p>
+                </div>
+            )}
         </div>
     );
 };
