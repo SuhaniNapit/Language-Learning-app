@@ -1,6 +1,7 @@
 // src/components/Translator.jsx
 import React, { useState } from 'react';
 import './Translator.css';
+import axios from 'axios';
 
 const Translator = () => {
     const [sourceText, setSourceText] = useState('');
@@ -8,6 +9,7 @@ const Translator = () => {
     const [sourceLang, setSourceLang] = useState('en');
     const [targetLang, setTargetLang] = useState('es');
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const languages = [
         { code: 'en', name: 'English' },
@@ -29,27 +31,20 @@ const Translator = () => {
         
         setIsLoading(true);
         try {
-            const response = await fetch('https://translation.googleapis.com/language/translate/v2', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${process.env.REACT_APP_GOOGLE_TRANSLATE_API_KEY}`
-                },
-                body: JSON.stringify({
+            const response = await axios.post(
+                `https://translation.googleapis.com/language/translate/v2?key=AIzaSyAeEbgYCjBa2qsoGsxVKI3OSs8nOzZ-4BY`,
+                {
                     q: sourceText,
-                    source: sourceLang,
                     target: targetLang,
-                    format: 'text'
-                })
-            });
+                }
+            );
 
-            const data = await response.json();
-            if (data.data && data.data.translations) {
-                setTranslatedText(data.data.translations[0].translatedText);
-            }
+            setTranslatedText(response.data.data.translations[0].translatedText);
+            setError('');
         } catch (error) {
-            console.error('Translation error:', error);
-            alert('Translation failed. Please try again.');
+            console.error('Error translating text:', error);
+            setError('Translation failed. Please try again.');
+            setTranslatedText('');
         } finally {
             setIsLoading(false);
         }
@@ -123,7 +118,7 @@ const Translator = () => {
                         className="copy-btn"
                         onClick={() => navigator.clipboard.writeText(translatedText)}
                     >
-                        📋
+                        Copy
                     </button>
                 </div>
             </div>
@@ -135,6 +130,8 @@ const Translator = () => {
             >
                 {isLoading ? 'Translating...' : 'Translate'}
             </button>
+
+            {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
     );
 };

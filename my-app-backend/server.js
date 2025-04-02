@@ -8,9 +8,14 @@ const authRoutes = require('./routes/auth'); // Create this file later
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
+const http = require('http');
+const socketIo = require('socket.io');
+const translateRoutes = require('./routes/translate');
 
 dotenv.config();
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -34,6 +39,9 @@ app.use(bodyParser.json());
 
 // Auth Routes
 app.use('/api', authRoutes); // Use the auth routes
+
+// Use the translation routes
+app.use('/api', translateRoutes);
 
 // Test route
 app.get('/api/test', (req, res) => {
@@ -115,8 +123,25 @@ app.get('/api/protected', authenticateToken, (req, res) => {
     res.json({ message: 'Protected data', user: req.user });
 });
 
-// Start the server
+// Socket.io connection
+io.on('connection', (socket) => {
+    console.log('New user connected');
+
+    socket.on('joinRoom', (room) => {
+        socket.join(room);
+    });
+
+    socket.on('chatMessage', (msg) => {
+        io.to(msg.room).emit('message', msg);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+
+// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
