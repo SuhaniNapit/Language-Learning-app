@@ -307,3 +307,27 @@
 .content {
     flex: 1;
 }
+.admin-panel {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background-color: #fef8e7;
+    border-left: 5px solid #ffb700;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.admin-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.admin-buttons .action-btn {
+    background-color: #ffe599;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+}

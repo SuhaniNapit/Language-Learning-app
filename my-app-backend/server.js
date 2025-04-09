@@ -1,138 +1,128 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // Import the cors package
-const cookieSession = require('cookie-session');
-const passport = require('passport');
+const cors = require('cors');
 const dotenv = require('dotenv');
-const authRoutes = require('./routes/auth'); // Create this file later
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const bodyParser = require('body-parser');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
 const http = require('http');
 const socketIo = require('socket.io');
-const translateRoutes = require('./routes/translate');
+const bodyParser = require('body-parser');
+const User = require('./models/User');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 dotenv.config();
+
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST'],
+        credentials: true,
+    },
+});
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('MongoDB connection error:', err));
 
 // Middleware
-const corsOptions = {
-    origin: 'http://localhost:3000', // Replace with your frontend URL
-    methods: ['GET', 'POST'], // Allowed methods
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
-};
-
-app.use(cors(corsOptions)); // Enable CORS with options
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+}));
+app.use(express.json());
+app.use(bodyParser.json());
 app.use(cookieSession({
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    maxAge: 24 * 60 * 60 * 1000,
     keys: [process.env.COOKIE_KEY],
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.json()); // Middleware to parse JSON bodies
-app.use(bodyParser.json());
 
-// Auth Routes
-app.use('/api', authRoutes); // Use the auth routes
+// Sign Up Route
+app.post('/api/signup', async (req, res) => {
+    const { username, email, password } = req.body;
 
-// Use the translation routes
-app.use('/api', translateRoutes);
+    if (!username || !email || !password) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
 
-// Test route
-app.get('/api/test', (req, res) => {
-    res.send('Server is running!');
-});
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+        return res.status(400).json({ error: 'User already exists' });
+    }
 
-// Register route
-app.post('/api/register', async (req, res) => {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ username, email, password: hashedPassword });
+
     try {
-        const { username, email, password } = req.body;
-        
-        // Log the received data
-        console.log('Received registration request:', { username, email });
-
-        // Create new user
-        const newUser = new User({
-            username,
-            email,
-            password: await bcrypt.hash(password, 10)
-        });
-
         await newUser.save();
         res.status(201).json({ message: 'User created successfully' });
-    } catch (error) {
-        console.error('Registration error:', error);
+    } catch (err) {
         res.status(500).json({ error: 'Error creating user' });
     }
 });
 
-// Use the JWT secret from environment variables
-const JWT_SECRET = process.env.JWT_SECRET;
-
-// Login endpoint
+// Login Route
 app.post('/api/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
+    const { email, password } = req.body;
 
-        // Find user and validate password
-        // ... your authentication logic here
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ error: 'Invalid email or password' });
 
-        // Generate token
-        const token = jwt.sign(
-            { userId: user._id, email: user.email },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ error: 'Invalid email or password' });
 
-        res.json({ 
-            message: 'Login successful',
-            token,
-            user: { id: user._id, email: user.email }
-        });
-    } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({ error: 'Error logging in' });
-    }
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
+        expiresIn: '1d',
+    });
+
+    res.status(200).json({
+        message: 'Login successful',
+        user: { id: user._id, username: user.username, email: user.email },
+        token,
+    });
 });
 
-// Middleware to verify JWT
+// Protected Route Example
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
-    if (!token) {
-        return res.status(401).json({ error: 'Access denied' });
-    }
+    if (!token) return res.status(401).json({ error: 'Access denied' });
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) {
-            return res.status(403).json({ error: 'Invalid token' });
-        }
+        if (err) return res.status(403).json({ error: 'Invalid token' });
         req.user = user;
         next();
     });
 };
 
-// Protected route example
 app.get('/api/protected', authenticateToken, (req, res) => {
     res.json({ message: 'Protected data', user: req.user });
 });
 
-// Socket.io connection
+// Socket.io
 io.on('connection', (socket) => {
     console.log('New user connected');
 
     socket.on('joinRoom', (room) => {
         socket.join(room);
+        socket.to(room).emit('receiveMessage', `${socket.id} has joined the room.`);
+        const members = Array.from(socket.rooms).filter((r) => r !== socket.id);
+        io.to(room).emit('updateMembers', members);
     });
 
-    socket.on('chatMessage', (msg) => {
-        io.to(msg.room).emit('message', msg);
+    socket.on('sendMessage', (messageData) => {
+        io.to(messageData.room).emit('receiveMessage', messageData.message);
     });
 
     socket.on('disconnect', () => {
@@ -140,8 +130,38 @@ io.on('connection', (socket) => {
     });
 });
 
-// Start server
+// Forgot Password Route
+app.post('/api/forgot-password', async (req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        return res.status(404).send('User not found');
+    }
+
+    // If the user is found, respond with a success message
+    res.status(200).send('Email found. Please enter a new password.');
+});
+
+// Reset Password Route
+app.post('/api/reset-password', async (req, res) => {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        return res.status(404).send('User not found');
+    }
+
+    // Hash the new password
+    user.password = await bcrypt.hash(password, 10);
+    await user.save();
+
+    res.status(200).send('Password has been reset successfully.');
+});
+
+// Start Server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });

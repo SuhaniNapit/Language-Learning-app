@@ -1,38 +1,34 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Ensure this model exists
+const User = require('../models/User');
 const router = express.Router();
 
-// Signup route
+// Signup 
 router.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, isAdmin } = req.body;
 
-    // Validate input
     if (!username || !email || !password) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
-    // Check if user already exists
     const existingUser = await User.findOne({ username });
     if (existingUser) {
         return res.status(400).json({ error: 'Username already exists' });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, email, password: hashedPassword });
+    const newUser = new User({ username, email, password: hashedPassword, isAdmin });
 
     try {
         await newUser.save();
         res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
-        console.error('Error creating user:', error); // Log the error for debugging
         res.status(500).json({ error: 'Error creating user' });
     }
 });
 
-// Login route
+// Login 
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
@@ -46,8 +42,8 @@ router.post('/login', async (req, res) => {
         return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
-    res.status(200).json({ token });
+    const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, 'your_jwt_secret', { expiresIn: '1h' });
+    res.status(200).json({ token, user: { username: user.username, isAdmin: user.isAdmin } });
 });
 
 module.exports = router;

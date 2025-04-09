@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, Navigate, NavLink } from 'react-router-dom';
 import HomePage from './components/HomePage';
@@ -13,9 +12,9 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import ElfsightChatbot from './components/ElfsightChatbot';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Profile from './components/Profile';
+import ForgotPassword from './components/ForgotPassword';
+// import ResetPassword from './components/ResetPassword';
 
-
-// Create a separate component for the routes that need auth
 function AppRoutes() {
     const { isLoggedIn, user, logout } = useAuth();
 
@@ -40,7 +39,10 @@ function AppRoutes() {
                 <div className="header-right">
                     {isLoggedIn ? (
                         <div className="profile-menu">
-                            <div className="profile-icon" onClick={() => document.getElementById('profile-dropdown').classList.toggle('show')}>
+                            <div
+                                className="profile-icon"
+                                onClick={() => document.getElementById('profile-dropdown')?.classList.toggle('show')}
+                            >
                                 {user?.username?.charAt(0).toUpperCase() || 'U'}
                             </div>
                             <div id="profile-dropdown" className="dropdown-content">
@@ -54,6 +56,7 @@ function AppRoutes() {
                     )}
                 </div>
             </header>
+
             <div className="layout">
                 <nav className="sidebar">
                     <ul>
@@ -64,57 +67,38 @@ function AppRoutes() {
                                 <li><NavLink to="/translator">Translator</NavLink></li>
                                 <li><NavLink to="/vocabulary">Vocabulary Practice</NavLink></li>
                                 <li><NavLink to="/study-room">Study Room</NavLink></li>
-                                
                             </>
                         ) : (
                             <li><NavLink to="/auth">Login / Sign Up</NavLink></li>
                         )}
                     </ul>
                 </nav>
+
                 <div className="content">
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/auth" element={<AuthForm />} />
-                        <Route 
-                            path="/dashboard" 
-                            element={
-                                isLoggedIn ? <Dashboard /> : <Navigate to="/auth" />
-                            } 
-                        />
-                        <Route 
-                            path="/translator" 
-                            element={isLoggedIn ? <Translator /> : <Navigate to="/auth" />} 
-                        />
-                        <Route 
-                            path="/vocabulary" 
-                            element={isLoggedIn ? <VocabularyPractice /> : <Navigate to="/auth" />} 
-                        />
-                        <Route 
-                            path="/study-room" 
-                            element={isLoggedIn ? <StudyRoom /> : <Navigate to="/auth" />} 
-                        />
-                        <Route 
-                            path="/chatbot" 
-                            element={isLoggedIn ? <ElfsightChatbot /> : <Navigate to="/auth" />} 
-                        />
-                        <Route 
-                            path="/profile" 
-                            element={isLoggedIn ? <Profile /> : <Navigate to="/auth" />} 
-                        />
-                        
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        {/* <Route path="/reset-password/:token" element={<ResetPassword />} /> */}
+                        <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/auth" />} />
+                        <Route path="/translator" element={isLoggedIn ? <Translator /> : <Navigate to="/auth" />} />
+                        <Route path="/vocabulary" element={isLoggedIn ? <VocabularyPractice /> : <Navigate to="/auth" />} />
+                        <Route path="/study-room" element={isLoggedIn ? <StudyRoom /> : <Navigate to="/auth" />} />
+                        <Route path="/chatbot" element={isLoggedIn ? <ElfsightChatbot /> : <Navigate to="/auth" />} />
+                        <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/auth" />} />
                     </Routes>
                 </div>
             </div>
+
             <Footer />
             <ElfsightChatbot />
         </div>
     );
 }
 
-// Main App component
 function App() {
     return (
-        <GoogleOAuthProvider clientId="your-google-client-id">
+        <GoogleOAuthProvider clientId="489995143272-fgcbvu9av49ln2gneondihtvqtk08lj5.apps.googleusercontent.com">
             <AuthProvider>
                 <Router basename="/">
                     <AppRoutes />

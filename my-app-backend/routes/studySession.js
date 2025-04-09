@@ -13,7 +13,7 @@ router.post('/create', async (req, res) => {
 // Join a study session
 router.post('/join/:id', async (req, res) => {
     const sessionId = req.params.id;
-    const userId = req.user._id; // Assuming user is authenticated and user ID is available
+    const userId = req.user._id; 
 
     const session = await StudySession.findById(sessionId);
     if (!session) return res.status(404).json({ message: 'Session not found' });

@@ -10,6 +10,7 @@ const Translator = () => {
     const [targetLang, setTargetLang] = useState('es');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [wordWarning, setWordWarning] = useState('');
 
     const languages = [
         { code: 'en', name: 'English' },
@@ -27,8 +28,12 @@ const Translator = () => {
     ];
 
     const handleTranslate = async () => {
-        if (!sourceText.trim()) return;
-        
+        const wordCount = sourceText.trim().split(/\s+/).length;
+        if (wordCount > 100) {
+            setError('Please limit your text to 100 words.');
+            return;
+        }
+
         setIsLoading(true);
         try {
             const response = await axios.post(
@@ -50,6 +55,18 @@ const Translator = () => {
         }
     };
 
+    const handleTextChange = (e) => {
+        const text = e.target.value;
+        setSourceText(text);
+
+        const wordCount = text.trim().split(/\s+/).length;
+        if (wordCount > 100) {
+            setWordWarning('⚠️ Maximum word limit of 100 exceeded');
+        } else {
+            setWordWarning('');
+        }
+    };
+
     const swapLanguages = () => {
         const tempLang = sourceLang;
         setSourceLang(targetLang);
@@ -68,11 +85,13 @@ const Translator = () => {
                         value={sourceLang}
                         onChange={(e) => setSourceLang(e.target.value)}
                     >
-                        {languages.map(lang => (
-                            <option key={lang.code} value={lang.code}>
-                                {lang.name}
-                            </option>
-                        ))}
+                        {languages
+                            .filter(lang => lang.code !== targetLang)
+                            .map(lang => (
+                                <option key={lang.code} value={lang.code}>
+                                    {lang.name}
+                                </option>
+                            ))}
                     </select>
                 </div>
 
@@ -85,11 +104,13 @@ const Translator = () => {
                         value={targetLang}
                         onChange={(e) => setTargetLang(e.target.value)}
                     >
-                        {languages.map(lang => (
-                            <option key={lang.code} value={lang.code}>
-                                {lang.name}
-                            </option>
-                        ))}
+                        {languages
+                            .filter(lang => lang.code !== sourceLang)
+                            .map(lang => (
+                                <option key={lang.code} value={lang.code}>
+                                    {lang.name}
+                                </option>
+                            ))}
                     </select>
                 </div>
             </div>
@@ -98,13 +119,11 @@ const Translator = () => {
                 <div className="text-container">
                     <textarea
                         value={sourceText}
-                        onChange={(e) => setSourceText(e.target.value)}
+                        onChange={handleTextChange}
                         placeholder="Enter text to translate..."
                         className="text-input"
                     />
-                    <button className="clear-btn" onClick={() => setSourceText('')}>
-                        ✕
-                    </button>
+                    {wordWarning && <p style={{ color: 'red', fontSize: '0.9rem', marginTop: '5px' }}>{wordWarning}</p>}
                 </div>
 
                 <div className="text-container">
@@ -114,24 +133,18 @@ const Translator = () => {
                         placeholder="Translation will appear here..."
                         className="text-input"
                     />
-                    <button 
-                        className="copy-btn"
-                        onClick={() => navigator.clipboard.writeText(translatedText)}
-                    >
-                        Copy
-                    </button>
                 </div>
             </div>
 
-            <button 
-                className="translate-btn" 
-                onClick={handleTranslate}
-                disabled={isLoading || !sourceText.trim()}
-            >
-                {isLoading ? 'Translating...' : 'Translate'}
+            <button
+                        className="translate-btn"
+                        onClick={handleTranslate}
+                        disabled={isLoading || !sourceText.trim() || sourceText.trim().split(/\s+/).length > 100}>
+                        {isLoading ? 'Translating...' : 'Translate'}
             </button>
 
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+
+            {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
         </div>
     );
 };

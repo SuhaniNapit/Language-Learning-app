@@ -1,18 +1,17 @@
 .translator {
-    text-align: center; /* Center align the content */
-    padding: 20px; /* Add some padding */
-}
-
-.translator-image {
-    width: 10%; /* Set the width to 100% of the container */
-    max-width: 400px; /* Set a maximum width for the image */
-    height: auto; /* Maintain aspect ratio */
-    border-radius: 5px; /* Optional: add rounded corners */
-    margin-bottom: 20px; /* Space below the image */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .translator-container {
     max-width: 1000px;
+    width: 100%;
     margin: 2rem auto;
     padding: 2rem;
     background: white;
@@ -32,6 +31,7 @@
     align-items: center;
     gap: 1rem;
     margin-bottom: 2rem;
+    flex-wrap: wrap;
 }
 
 .select-container {
@@ -50,16 +50,24 @@
 }
 
 .swap-btn {
-    background: none;
+    width: 40px;
+    height: 40px;
+    background-color: #3498db;
+    color: white;
     border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0.5rem;
     border-radius: 50%;
-    transition: transform 0.3s ease;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, transform 0.3s ease;
+    padding: 0;
+    flex-shrink: 0;
 }
 
 .swap-btn:hover {
+    background-color: #2980b9;
     transform: rotate(180deg);
 }
 
@@ -84,31 +92,13 @@
     font-size: 1rem;
     resize: none;
     line-height: 1.5;
+    background-color: #fff;
 }
 
 .text-input:focus {
     outline: none;
     border-color: #3498db;
     box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-}
-
-.clear-btn,
-.copy-btn {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background: none;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    opacity: 0.6;
-    transition: opacity 0.2s;
-}
-
-.clear-btn:hover,
-.copy-btn:hover {
-    opacity: 1;
 }
 
 .translate-btn {
@@ -146,5 +136,10 @@
     .translator-container {
         margin: 1rem;
         padding: 1rem;
+    }
+
+    .language-selector {
+        flex-direction: column;
+        gap: 0.75rem;
     }
 }

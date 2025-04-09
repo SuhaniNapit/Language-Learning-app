@@ -1,6 +1,8 @@
+// ==== Profile.jsx ====
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './Profile.css';
+import { Eye, EyeOff } from 'lucide-react';
 
 const Profile = () => {
     const { user, login } = useAuth();
@@ -11,6 +13,11 @@ const Profile = () => {
         currentPassword: '',
         newPassword: '',
         confirmNewPassword: '',
+    });
+    const [show, setShow] = useState({
+        current: false,
+        new: false,
+        confirm: false,
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -25,17 +32,11 @@ const Profile = () => {
         }
     }, [user]);
 
-    const isValidEmail = (email) => {
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        return emailRegex.test(email);
-    };
+    const isValidEmail = (email) => /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,6}$/.test(email);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setFormData(prev => ({ ...prev, [name]: value }));
         setError('');
         setSuccess('');
     };
@@ -45,13 +46,11 @@ const Profile = () => {
         setError('');
         setSuccess('');
 
-        // Validate email if it's being changed
         if (formData.email !== user.email && !isValidEmail(formData.email)) {
             setError('Please enter a valid email address');
             return;
         }
 
-        // Validate new password if being changed
         if (formData.newPassword) {
             if (formData.newPassword !== formData.confirmNewPassword) {
                 setError('New passwords do not match');
@@ -81,10 +80,9 @@ const Profile = () => {
             const data = await response.json();
 
             if (response.ok) {
-                login(data); // Update the user context with new data
+                login(data);
                 setSuccess('Profile updated successfully!');
                 setIsEditing(false);
-                // Clear sensitive form fields
                 setFormData(prev => ({
                     ...prev,
                     currentPassword: '',
@@ -102,7 +100,6 @@ const Profile = () => {
     return (
         <div className="profile-container">
             <h2>Profile Settings</h2>
-            
             {(error || success) && (
                 <div className={`alert ${error ? 'alert-error' : 'alert-success'}`}>
                     {error || success}
@@ -144,36 +141,45 @@ const Profile = () => {
 
                     {isEditing && (
                         <>
-                            <div className="form-group">
+                            <div className="form-group password-group">
                                 <label>Current Password</label>
                                 <input
-                                    type="password"
+                                    type={show.current ? 'text' : 'password'}
                                     name="currentPassword"
                                     value={formData.currentPassword}
                                     onChange={handleChange}
                                     required
                                 />
+                                <span className="toggle-password" onClick={() => setShow(p => ({ ...p, current: !p.current }))}>
+                                    {show.current ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </span>
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group password-group">
                                 <label>New Password (optional)</label>
                                 <input
-                                    type="password"
+                                    type={show.new ? 'text' : 'password'}
                                     name="newPassword"
                                     value={formData.newPassword}
                                     onChange={handleChange}
                                 />
+                                <span className="toggle-password" onClick={() => setShow(p => ({ ...p, new: !p.new }))}>
+                                    {show.new ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </span>
                             </div>
 
                             {formData.newPassword && (
-                                <div className="form-group">
+                                <div className="form-group password-group">
                                     <label>Confirm New Password</label>
                                     <input
-                                        type="password"
+                                        type={show.confirm ? 'text' : 'password'}
                                         name="confirmNewPassword"
                                         value={formData.confirmNewPassword}
                                         onChange={handleChange}
                                     />
+                                    <span className="toggle-password" onClick={() => setShow(p => ({ ...p, confirm: !p.confirm }))}>
+                                        {show.confirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                                    </span>
                                 </div>
                             )}
                         </>
@@ -181,18 +187,12 @@ const Profile = () => {
 
                     <div className="profile-actions">
                         {!isEditing ? (
-                            <button
-                                type="button"
-                                className="edit-button"
-                                onClick={() => setIsEditing(true)}
-                            >
+                            <button type="button" className="edit-button" onClick={() => setIsEditing(true)}>
                                 Edit Profile
                             </button>
                         ) : (
                             <>
-                                <button type="submit" className="save-button">
-                                    Save Changes
-                                </button>
+                                <button type="submit" className="save-button">Save Changes</button>
                                 <button
                                     type="button"
                                     className="cancel-button"
@@ -218,4 +218,4 @@ const Profile = () => {
     );
 };
 
-export default Profile; 
+export default Profile;

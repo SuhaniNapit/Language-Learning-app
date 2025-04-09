@@ -1,8 +1,10 @@
+// ==== AuthForm.jsx ====
 import React, { useState } from 'react';
-import './AuthForm.css'; // Import the CSS for the AuthForm component
+import './AuthForm.css';
 import { GoogleLogin } from '@react-oauth/google';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
-import { useAuth } from '../context/AuthContext'; // Import useAuth
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { Eye, EyeOff } from 'lucide-react';
 
 const AuthForm = () => {
     const [username, setUsername] = useState('');
@@ -11,41 +13,48 @@ const AuthForm = () => {
     const [email, setEmail] = useState('');
     const [isLogin, setIsLogin] = useState(true);
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const navigate = useNavigate();
-    const { login } = useAuth(); // Use the auth context
+    const { login } = useAuth();
+
+    const validatePassword = (password) => {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&])[A-Za-z\d@$!%*?#&]{8,}$/;
+        return regex.test(password);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
 
-        if (!isLogin && password !== confirmPassword) {
-            setError('Passwords do not match');
-            return;
+        if (!isLogin) {
+            if (password !== confirmPassword) {
+                setError('Passwords do not match');
+                return;
+            }
+            if (!validatePassword(password)) {
+                setError('Password must be at least 8 characters and include uppercase, lowercase, number, and special character.');
+                return;
+            }
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/api/${isLogin ? 'login' : 'register'}`, {
+            const response = await fetch(`http://localhost:5000/api/${isLogin ? 'login' : 'signup'}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    username,
+                    username: isLogin ? undefined : username,
                     email,
                     password,
                 }),
             });
 
             const data = await response.json();
-            console.log('Response:', data); // For debugging
-
             if (response.ok) {
                 if (isLogin) {
-                    // Handle login success
-                    login(data); // This will set the token and user data
+                    login(data);
                     navigate('/dashboard');
                 } else {
-                    // Handle registration success
                     alert('Registration successful! Please login.');
                     setIsLogin(true);
                 }
@@ -58,22 +67,8 @@ const AuthForm = () => {
         }
     };
 
-    const handleOAuthLogin = async (provider) => {
-        if (provider === 'Google') {
-            return (
-                <GoogleLogin
-                    onSuccess={(credentialResponse) => {
-                        console.log(credentialResponse);
-                        login(credentialResponse);
-                        navigate('/dashboard');
-                    }}
-                    onError={() => {
-                        console.log('Login Failed');
-                        setError('Google login failed');
-                    }}
-                />
-            );
-        }
+    const handleForgotPassword = () => {
+        navigate('/forgot-password');
     };
 
     return (
@@ -101,44 +96,54 @@ const AuthForm = () => {
                         required
                     />
                 </div>
-                <div className="form-group">
+                <div className="form-group password-group">
                     <input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
+                    <span
+                        className="toggle-password"
+                        onClick={() => setShowPassword(!showPassword)}
+                    >
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </span>
                 </div>
                 {!isLogin && (
-                    <div className="form-group">
+                    <div className="form-group password-group">
                         <input
-                            type="password"
+                            type={showConfirmPassword ? 'text' : 'password'}
                             placeholder="Confirm Password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required
                         />
+                        <span
+                            className="toggle-password"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                            {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </span>
                     </div>
                 )}
                 <button type="submit" className="submit-button">
                     {isLogin ? 'Login' : 'Sign Up'}
                 </button>
             </form>
-            
+
             <div className="auth-divider">
                 <span>OR</span>
             </div>
-            
+
             <div className="google-auth-container">
                 <GoogleLogin
                     onSuccess={(credentialResponse) => {
-                        console.log(credentialResponse);
                         login(credentialResponse);
                         navigate('/dashboard');
                     }}
                     onError={() => {
-                        console.log('Login Failed');
                         setError('Google login failed');
                     }}
                 />
@@ -146,6 +151,10 @@ const AuthForm = () => {
 
             <p onClick={() => setIsLogin(!isLogin)} className="toggle-auth">
                 {isLogin ? "Don't have an account? Sign Up" : 'Already have an account? Login'}
+            </p>
+
+            <p>
+                <button onClick={handleForgotPassword}>Forgot Password?</button>
             </p>
         </div>
     );
