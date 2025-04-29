@@ -5,15 +5,15 @@ import AuthForm from './components/AuthForm';
 import Dashboard from './components/Dashboard';
 import Translator from './components/Translator';
 import VocabularyPractice from './components/VocabularyPractice';
-import StudyRoom from './components/StudyRoom';
+import VocabularyQuiz from './components/VocabularyQuiz';
 import Footer from './components/Footer';
-import './styles.css';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ElfsightChatbot from './components/ElfsightChatbot';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import Profile from './components/Profile';
 import ForgotPassword from './components/ForgotPassword';
-// import ResetPassword from './components/ResetPassword';
+import AdminDashboard from './components/AdminDashboard';
+import './styles.css';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function AppRoutes() {
     const { isLoggedIn, user, logout } = useAuth();
@@ -27,7 +27,6 @@ function AppRoutes() {
                 }
             }
         };
-
         document.addEventListener('click', closeDropdown);
         return () => document.removeEventListener('click', closeDropdown);
     }, []);
@@ -39,15 +38,13 @@ function AppRoutes() {
                 <div className="header-right">
                     {isLoggedIn ? (
                         <div className="profile-menu">
-                            <div
-                                className="profile-icon"
-                                onClick={() => document.getElementById('profile-dropdown')?.classList.toggle('show')}
-                            >
+                            <div className="profile-icon" onClick={() => document.getElementById('profile-dropdown')?.classList.toggle('show')}>
                                 {user?.username?.charAt(0).toUpperCase() || 'U'}
                             </div>
                             <div id="profile-dropdown" className="dropdown-content">
                                 <Link to="/profile">My Profile</Link>
                                 <Link to="/dashboard">Dashboard</Link>
+                                {user?.isAdmin && <Link to="/admin">Admin Panel</Link>}
                                 <button onClick={logout}>Logout</button>
                             </div>
                         </div>
@@ -66,7 +63,8 @@ function AppRoutes() {
                                 <li><NavLink to="/dashboard">Dashboard</NavLink></li>
                                 <li><NavLink to="/translator">Translator</NavLink></li>
                                 <li><NavLink to="/vocabulary">Vocabulary Practice</NavLink></li>
-                                <li><NavLink to="/study-room">Study Room</NavLink></li>
+                                <li><NavLink to="/study-room">Vocabulary Quiz</NavLink></li>
+                                {user?.isAdmin && <li><NavLink to="/admin">Admin Panel</NavLink></li>}
                             </>
                         ) : (
                             <li><NavLink to="/auth">Login / Sign Up</NavLink></li>
@@ -79,11 +77,11 @@ function AppRoutes() {
                         <Route path="/" element={<HomePage />} />
                         <Route path="/auth" element={<AuthForm />} />
                         <Route path="/forgot-password" element={<ForgotPassword />} />
-                        {/* <Route path="/reset-password/:token" element={<ResetPassword />} /> */}
                         <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/auth" />} />
                         <Route path="/translator" element={isLoggedIn ? <Translator /> : <Navigate to="/auth" />} />
                         <Route path="/vocabulary" element={isLoggedIn ? <VocabularyPractice /> : <Navigate to="/auth" />} />
-                        <Route path="/study-room" element={isLoggedIn ? <StudyRoom /> : <Navigate to="/auth" />} />
+                        <Route path="/study-room" element={isLoggedIn ? <VocabularyQuiz /> : <Navigate to="/auth" />} />
+                        <Route path="/admin" element={isLoggedIn && user?.isAdmin ? <AdminDashboard /> : <Navigate to="/auth" />} />
                         <Route path="/chatbot" element={isLoggedIn ? <ElfsightChatbot /> : <Navigate to="/auth" />} />
                         <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/auth" />} />
                     </Routes>

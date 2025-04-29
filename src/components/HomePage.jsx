@@ -17,9 +17,9 @@ const HomePage = () => {
                 <p>Here you can translate, practice vocabulary, and study effectively.</p>
                 <p>This app helps you learn new skills and improve your knowledge through interactive lessons and quizzes.</p>
                 <p>Features include:</p>
-                <li>Interactive lessons on various topics</li>
-                <li>Vocabulary practice to enhance your language skills</li>
-                <li>Study room for collaborative learning</li>
+                <li>Translator tool for translating words or sentences in different languages</li>
+                <li>Vocabulary practice to enhance your pronounciation skills</li>
+                <li>Vocabulary quizzes for better knowledge of words</li>
                 <li>Chatbot assistance for quick queries</li>
                 <p>Get started by clicking the button in the top right corner!</p>
 

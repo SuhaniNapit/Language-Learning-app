@@ -1,85 +1,157 @@
 // src/components/VocabularyPractice.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './VocabularyPractice.css';
 
+const wordList = [
+    { word: 'abate', meaning: 'to lessen', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/abate--_gb_1.mp3' },
+    
+    { word: 'candid', meaning: 'truthful and straightforward', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/candid--_gb_1.mp3' },
+    { word: 'debilitate', meaning: 'to weaken', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/debilitate--_gb_1.mp3' },
+    { word: 'elated', meaning: 'ecstatically happy', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/elated--_gb_1.mp3' },
+    { word: 'futile', meaning: 'pointless or useless', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/futile--_gb_1.mp3' },
+    { word: 'gregarious', meaning: 'sociable', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/gregarious--_gb_1.mp3' },
+    { word: 'hypothetical', meaning: 'based on an assumption', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/hypothetical--_gb_1.mp3' },
+    { word: 'imminent', meaning: 'about to happen', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/imminent--_gb_1.mp3' },
+    { word: 'jubilant', meaning: 'feeling or expressing great joy', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/jubilant--_gb_1.mp3' },
+    { word: 'keen', meaning: 'eager or enthusiastic', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/keen--_gb_1.mp3' },
+    { word: 'lament', meaning: 'to express sorrow', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/lament--_gb_1.mp3' },
+    //{ word: 'meticulous', meaning: 'very careful and precise', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/meticulous--_gb_1.mp3' },
+    { word: 'novel', meaning: 'new or unusual', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/novel--_gb_1.mp3' },
+    { word: 'obsolete', meaning: 'out of date', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/obsolete--_gb_1.mp3' },
+    { word: 'pragmatic', meaning: 'practical', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/pragmatic--_gb_1.mp3' },
+    { word: 'quaint', meaning: 'attractively unusual', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/quaint--_gb_1.mp3' },
+    { word: 'ravenous', meaning: 'extremely hungry', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/ravenous--_gb_1.mp3' },
+    //{ word: 'serene', meaning: 'calm and peaceful', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/serene--_gb_1.mp3' },
+    //{ word: 'tenacious', meaning: 'persistent, determined', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/tenacious--_gb_1.mp3' },
+    { word: 'ubiquitous', meaning: 'present everywhere', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/ubiquitous--_gb_1.mp3' },
+    { word: 'vigilant', meaning: 'keeping careful watch', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/vigilant--_gb_1.mp3' },
+    { word: 'wane', meaning: 'to decrease gradually', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/wane--_gb_1.mp3' },
+    { word: 'xenophobia', meaning: 'dislike of foreigners', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/xenophobia--_gb_1.mp3' },
+    { word: 'zealous', meaning: 'having great energy or enthusiasm', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/zealous--_gb_1.mp3' },
+    { word: 'aberration', meaning: 'a departure from what is normal', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/aberration--_gb_1.mp3' },
+    { word: 'belligerent', meaning: 'hostile and aggressive', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/belligerent--_gb_1.mp3' },
+    { word: 'clandestine', meaning: 'kept secret or done secretly', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/clandestine--_gb_1.mp3' },
+{ word: 'diligent', meaning: 'showing care in ones work', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/diligent--_gb_1.mp3' },
+//{ word: 'emulate', meaning: 'to imitate', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/emulate--_gb_1.mp3' },
+//{ word: 'fluctuate', meaning: 'to rise and fall irregularly', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/fluctuate--_gb_1.mp3' },
+{ word: 'gratuitous', meaning: 'unnecessary or uncalled for', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/gratuitous--_gb_1.mp3' },
+{ word: 'haughty', meaning: 'arrogantly superior', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/haughty--_gb_1.mp3' },
+{ word: 'indolent', meaning: 'lazy', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/indolent--_gb_1.mp3' },
+{ word: 'juxtapose', meaning: 'to place side by side', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/juxtapose--_gb_1.mp3' },
+{ word: 'kinetic', meaning: 'relating to motion', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/kinetic--_gb_1.mp3' },
+{ word: 'lucid', meaning: 'expressed clearly', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/lucid--_gb_1.mp3' },
+{ word: 'magnanimous', meaning: 'generous or forgiving', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/magnanimous--_gb_1.mp3' },
+{ word: 'nostalgia', meaning: 'longing for the past', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/nostalgia--_gb_1.mp3' },
+{ word: 'ostracize', meaning: 'to exclude from a group', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/ostracize--_gb_1.mp3' },
+{ word: 'placate', meaning: 'to calm or appease', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/placate--_gb_1.mp3' },
+{ word: 'quagmire', meaning: 'a difficult situation', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/quagmire--_gb_1.mp3' },
+{ word: 'relinquish', meaning: 'to give up', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/relinquish--_gb_1.mp3' },
+{ word: 'sagacious', meaning: 'wise and shrewd', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/sagacious--_gb_1.mp3' },
+{ word: 'tantamount', meaning: 'equivalent to', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/tantamount--_gb_1.mp3' },
+//{ word: 'usurp', meaning: 'to take by force', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/usurp--_gb_1.mp3' },
+{ word: 'vapid', meaning: 'offering nothing stimulating', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/vapid--_gb_1.mp3' },
+//{ word: 'wary', meaning: 'cautious about danger', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/wary--_gb_1.mp3' },
+{ word: 'yearn', meaning: 'to long for', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/yearn--_gb_1.mp3' },
+//{ word: 'zenith', meaning: 'the highest point', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/zenith--_gb_1.mp3' },
+
+//{ word: 'alacrity', meaning: 'brisk and cheerful readiness', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/alacrity--_gb_1.mp3' },
+{ word: 'banal', meaning: 'lacking originality', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/banal--_gb_1.mp3' },
+{ word: 'cacophony', meaning: 'a harsh mixture of sounds', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/cacophony--_gb_1.mp3' },
+//{ word: 'dauntless', meaning: 'showing fearlessness', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/dauntless--_gb_1.mp3' },
+{ word: 'eclectic', meaning: 'deriving ideas from various sources', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/eclectic--_gb_1.mp3' },
+//{ word: 'fervent', meaning: 'having passionate intensity', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/fervent--_gb_1.mp3' },
+//{ word: 'garrulous', meaning: 'excessively talkative', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/garrulous--_gb_1.mp3' },
+//{ word: 'hackneyed', meaning: 'overused and unoriginal', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/hackneyed--_gb_1.mp3' },
+{ word: 'immutable', meaning: 'unchanging over time', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/immutable--_gb_1.mp3' },
+//{ word: 'jocular', meaning: 'humorous or playful', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/jocular--_gb_1.mp3' },
+{ word: 'kudos', meaning: 'praise for achievement', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/kudos--_gb_1.mp3' },
+{ word: 'loquacious', meaning: 'talkative', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/loquacious--_gb_1.mp3' },
+{ word: 'mundane', meaning: 'lacking interest or excitement', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/mundane--_gb_1.mp3' },
+//{ word: 'nefarious', meaning: 'wicked or criminal', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/nefarious--_gb_1.mp3' },
+{ word: 'obstinate', meaning: 'stubbornly refusing to change', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/obstinate--_gb_1.mp3' },
+{ word: 'perfunctory', meaning: 'carried out with minimum effort', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/perfunctory--_gb_1.mp3' },
+{ word: 'quixotic', meaning: 'exceedingly idealistic', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/quixotic--_gb_1.mp3' },
+//{ word: 'rancor', meaning: 'bitterness or resentment', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/rancor--_gb_1.mp3' },
+//{ word: 'scrupulous', meaning: 'very concerned to avoid wrongdoing', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/scrupulous--_gb_1.mp3' },
+{ word: 'tirade', meaning: 'a long angry speech', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/tirade--_gb_1.mp3' },
+{ word: 'ubiquitous', meaning: 'present everywhere', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/ubiquitous--_gb_1.mp3' },
+//{ word: 'vociferous', meaning: 'loud and forceful', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/vociferous--_gb_1.mp3' },
+{ word: 'wan', meaning: 'pale and giving impression of illness', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/wan--_gb_1.mp3' },
+{ word: 'xenophobia', meaning: 'dislike of foreigners', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/xenophobia--_gb_1.mp3' },
+{ word: 'yokel', meaning: 'an uneducated country person', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/yokel--_gb_1.mp3' },
+ 
+{ word: 'zephyr', meaning: 'a soft gentle breeze', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/zephyr--_gb_1.mp3' },
+{ word: 'aplomb', meaning: 'self-confidence or assurance', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/aplomb--_gb_1.mp3' },
+{ word: 'bombastic', meaning: 'high-sounding with little meaning', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/bombastic--_gb_1.mp3' },
+{ word: 'cajole', meaning: 'persuade by flattery', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/cajole--_gb_1.mp3' },
+{ word: 'dilatory', meaning: 'slow to act', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/dilatory--_gb_1.mp3' },
+//{ word: 'egregious', meaning: 'outstandingly bad', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/egregious--_gb_1.mp3' },
+{ word: 'fastidious', meaning: 'very attentive to detail', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/fastidious--_gb_1.mp3' },
+//{ word: 'gregarious', meaning: 'fond of company', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/gregarious--_gb_1.mp3' },
+{ word: 'harangue', meaning: 'a lengthy aggressive speech', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/harangue--_gb_1.mp3' },
+//{ word: 'impetuous', meaning: 'acting quickly without thought', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/impetuous--_gb_1.mp3' },
+{ word: 'juxtapose', meaning: 'place side by side for contrast', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/juxtapose--_gb_1.mp3' },
+{ word: 'kinetic', meaning: 'relating to motion', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/kinetic--_gb_1.mp3' },
+{ word: 'laconic', meaning: 'using few words', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/laconic--_gb_1.mp3' },
+//{ word: 'mellifluous', meaning: 'sweet or musical in sound', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/mellifluous--_gb_1.mp3' },
+{ word: 'noxious', meaning: 'harmful or poisonous', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/noxious--_gb_1.mp3' },
+//{ word: 'obdurate', meaning: 'stubbornly refusing to change', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/obdurate--_gb_1.mp3' },
+{ word: 'panacea', meaning: 'a universal cure', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/panacea--_gb_1.mp3' },
+{ word: 'quagmire', meaning: 'a difficult situation', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/quagmire--_gb_1.mp3' },
+{ word: 'reticent', meaning: 'reserved or withdrawn', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/reticent--_gb_1.mp3' },
+{ word: 'sagacious', meaning: 'wise or shrewd', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/sagacious--_gb_1.mp3' },
+{ word: 'tantamount', meaning: 'equivalent in seriousness', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/tantamount--_gb_1.mp3' },
+{ word: 'umbrage', meaning: 'offense or annoyance', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/umbrage--_gb_1.mp3' },
+{ word: 'vex', meaning: 'make someone feel annoyed', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/vex--_gb_1.mp3' },
+{ word: 'wily', meaning: 'skilled at gaining an advantage', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/wily--_gb_1.mp3' },
+{ word: 'yarn', meaning: 'a long story of adventures', audio: 'https://ssl.gstatic.com/dictionary/static/sounds/20200429/yarn--_gb_1.mp3' },
+];
+
 const VocabularyPractice = () => {
-    const [currentWord, setCurrentWord] = useState('');
-    const [meaning, setMeaning] = useState('');
-    const [pronunciationUrl, setPronunciationUrl] = useState('');
-    const [feedback, setFeedback] = useState('');
+  const [remainingWords, setRemainingWords] = useState([]);
+  const [currentWord, setCurrentWord] = useState(null);
+  const [feedback, setFeedback] = useState('');
 
-    const apiKey = 'q8n8or3i298ia1nsdk1kpwkz1mgoeouka0gt3gc8dt129djnw';
+  useEffect(() => {
+    const shuffled = [...wordList].sort(() => Math.random() - 0.5);
+    setRemainingWords(shuffled);
+    setCurrentWord(shuffled[0]);
+  }, []);
 
-    const fetchWord = async () => {
-        try {
-            // Step 1: Get random word
-            const wordRes = await axios.get(`https://api.wordnik.com/v4/words.json/randomWord`, {
-                params: {
-                    hasDictionaryDef: true,
-                    api_key: apiKey
-                }
-            });
+  const nextWord = () => {
+    if (remainingWords.length <= 1) {
+      setFeedback('🎉 You have practiced all the words! Great job!');
+      return;
+    }
 
-            const word = wordRes.data.word;
-            setCurrentWord(word);
-            setFeedback('');
+    const updatedWords = remainingWords.slice(1);
+    setRemainingWords(updatedWords);
+    setCurrentWord(updatedWords[0]);
+    setFeedback('');
+  };
 
-            // Step 2: Get meaning
-            const defRes = await axios.get(`https://api.wordnik.com/v4/word.json/${word}/definitions`, {
-                params: {
-                    limit: 1,
-                    api_key: apiKey
-                }
-            });
+  const playAudio = () => {
+    if (currentWord?.audio) {
+      const audio = new Audio(currentWord.audio);
+      audio.play().catch(err => {
+        console.warn('Audio playback failed:', err);
+        setFeedback('Audio not available');
+      });
+    }
+  };
 
-            const definition = defRes.data?.[0]?.text || 'No definition found.';
-            setMeaning(definition);
+  if (!currentWord) return <div>Loading...</div>;
 
-            // Step 3: Get pronunciation
-            const audioRes = await axios.get(`https://api.wordnik.com/v4/word.json/${word}/audio`, {
-                params: {
-                    limit: 1,
-                    api_key: apiKey
-                }
-            });
-
-            const audioUrl = audioRes.data?.[0]?.fileUrl || '';
-            setPronunciationUrl(audioUrl);
-
-        } catch (error) {
-            console.error('Error fetching word:', error);
-            setCurrentWord('');
-            setMeaning('');
-            setPronunciationUrl('');
-            setFeedback('Error fetching word. Please try again.');
-        }
-    };
-
-    useEffect(() => {
-        fetchWord(); // Load first word
-    }, []);
-
-    const playPronunciation = () => {
-        if (pronunciationUrl) {
-            new Audio(pronunciationUrl).play();
-        } else {
-            alert('No pronunciation audio available.');
-        }
-    };
-
-    return (
-        <div className="vocabulary-practice-container">
-            <h1 style={{ color: '#333' }}>Vocabulary Practice</h1>
-            {currentWord && <h2>Word: {currentWord}</h2>}
-            {pronunciationUrl && (
-                <button onClick={playPronunciation}>🔊 Pronounce</button>
-            )}
-            <p><strong>Meaning:</strong> {meaning}</p>
-            <button onClick={fetchWord}>Next Word</button>
-            {feedback && <p style={{ color: 'red' }}>{feedback}</p>}
-        </div>
-    );
+  return (
+    <div className="vocabulary-practice-container">
+      <h1 style={{ color: '#2c3e50' }}>Vocabulary Practice</h1>
+      <h2>Word: {currentWord.word}</h2>
+      <button onClick={playAudio}>🔊 Pronounce</button>
+      <p><strong>Meaning:</strong> {currentWord.meaning}</p>
+      <button onClick={nextWord}>Next Word</button>
+      {feedback && <p style={{ color: 'green', marginTop: '10px' }}>{feedback}</p>}
+    </div>
+  );
 };
 
 export default VocabularyPractice;

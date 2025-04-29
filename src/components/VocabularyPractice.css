@@ -1,46 +1,51 @@
-.vocabulary-practice {
-    text-align: center; /* Center align the content */
-    padding: 20px; /* Add some padding */
-}
-
-.vocabulary-image {
-    width: 100%; /* Adjust width as needed */
-    height: auto; /* Maintain aspect ratio */
-    margin-bottom: 20px; /* Space below the image */
-}
+/* src/components/VocabularyPractice.css */
 
 .vocabulary-practice-container {
-    width: 400px;
-    margin: 0 auto;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    background-color: #9685e7;
+    max-width: 450px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     text-align: center;
-}
-
-.flashcard {
-    margin-bottom: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fff;
-}
-
-.buttons {
-    margin: 10px 0;
-}
-
-button {
-    margin: 5px;
-    padding: 10px;
-    background-color: #4CAF50;
+  }
+  
+  .vocabulary-practice-container h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+  }
+  
+  .vocabulary-practice-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #34495e;
+  }
+  
+  .vocabulary-practice-container p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #555;
+  }
+  
+  button {
+    background-color: #3498db;
     color: white;
+    padding: 12px 20px;
+    margin: 10px 5px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
+    font-size: 1rem;
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #2980b9;
+  }
+  
+  button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+  }
+  

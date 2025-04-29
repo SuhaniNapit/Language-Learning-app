@@ -331,3 +331,23 @@
     font-weight: bold;
     color: #333;
 }
+.badges-section {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  .badges-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .badge {
+    display: inline-block;
+    background-color: #f1c40f;
+    color: #2c3e50;
+    padding: 8px 15px;
+    margin: 5px;
+    border-radius: 20px;
+    font-weight: bold;
+  }
+  
