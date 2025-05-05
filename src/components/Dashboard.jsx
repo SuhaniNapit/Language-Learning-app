@@ -21,37 +21,42 @@ const Dashboard = () => {
     const today = new Date();
     const todayString = today.toLocaleDateString();
   
-    const keyPrefix = `user_${user.username}`;
-    const storedLastActive = localStorage.getItem(`${keyPrefix}_lastActive`);
-    let storedStreak = parseInt(localStorage.getItem(`${keyPrefix}_streak`)) || 1;
-    let storedBadges = JSON.parse(localStorage.getItem(`${keyPrefix}_badges`)) || [];
+    const lastActiveKey = `lastActive_${user.username}`;
+    const streakKey = `streak_${user.username}`;
+    const badgeKey = `badges_${user.username}`;
   
-    let newStreak = storedStreak;
+    const storedLastActive = localStorage.getItem(lastActiveKey);
+    const storedStreak = parseInt(localStorage.getItem(streakKey), 10);
+    const storedBadges = JSON.parse(localStorage.getItem(badgeKey)) || [];
+  
+    let newStreak = 1;
     let badges = [...storedBadges];
   
     if (storedLastActive) {
-      const lastDate = new Date(storedLastActive);
-      const diffTime = today - lastDate;
-      const diffDays = diffTime / (1000 * 60 * 60 * 24);
+      const lastActiveDate = new Date(storedLastActive);
+      const diffTime = today.getTime() - lastActiveDate.getTime();
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
   
-      if (diffDays >= 2) {
+      if (diffDays === 1) {
+        // User visited yesterday, increase streak
+        newStreak = (isNaN(storedStreak) ? 1 : storedStreak) + 1;
+      } else if (diffDays > 1) {
+        // Missed at least one day, reset streak
         newStreak = 1;
-        badges = [];
-      } else if (diffDays >= 1) {
-        newStreak += 1;
+        badges = []; // Optional: reset badges if streak resets
+      } else {
+        // Same day login, keep streak unchanged
+        newStreak = isNaN(storedStreak) ? 1 : storedStreak;
       }
-      // If diffDays < 1 (same day), don't change streak
-    } 
-    // ELSE:
-    // If no storedLastActive => assume user already existing => KEEP the old streak safely (don't reset!)
+    }
   
-    // Calculate badge score (100 points per badge)
-    const badgeScore = badges.length * 100;
+    // Save updated stats
+    localStorage.setItem(lastActiveKey, todayString);
+    localStorage.setItem(streakKey, newStreak.toString());
+    localStorage.setItem(badgeKey, JSON.stringify(badges));
   
-    // Save today's last active
-    localStorage.setItem(`${keyPrefix}_lastActive`, todayString);
-    localStorage.setItem(`${keyPrefix}_streak`, newStreak);
-    localStorage.setItem(`${keyPrefix}_badges`, JSON.stringify(badges));
+    const badgePoints = 100;
+    const badgeScore = badges.length * badgePoints;
   
     setStats({
       streak: newStreak,
@@ -60,6 +65,7 @@ const Dashboard = () => {
       badges,
     });
   }, [user]);
+  
   
 
   const handleStartQuiz = () => {

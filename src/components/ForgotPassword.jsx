@@ -9,6 +9,7 @@ const ForgotPassword = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isResetting, setIsResetting] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleEmailSubmit = async (e) => {
         e.preventDefault();
@@ -61,6 +62,10 @@ const ForgotPassword = () => {
             setMessage('Error resetting password.');
             setMessageType('error');
         }
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
     return (

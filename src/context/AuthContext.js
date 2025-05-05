@@ -1,3 +1,4 @@
+// src/context/AuthContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext(null);
@@ -9,19 +10,19 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         const userData = localStorage.getItem('user');
-
         if (token && userData) {
             setIsLoggedIn(true);
             setUser(JSON.parse(userData));
         }
     }, []);
 
-    const login = (userData) => {
-        setIsLoggedIn(true);
-        setUser(userData);
-        localStorage.setItem('token', userData.token);
-        localStorage.setItem('user', JSON.stringify(userData));
-    };
+    const login = (data) => {
+    setIsLoggedIn(true);
+    setUser(data.user); // ⬅️ store just the user object
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user)); // ⬅️ store only data.user
+};
+
 
     const logout = () => {
         setIsLoggedIn(false);
@@ -37,12 +38,4 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
-};
-
-export default AuthContext;
+export const useAuth = () => useContext(AuthContext);

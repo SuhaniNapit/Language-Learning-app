@@ -231,6 +231,10 @@
     content: "🔐";
 }
 
+.sidebar a[href="/admin"]::before {
+    content: "👑";
+}
+
 /* Add a subtle indicator for protected links */
 .sidebar li.protected a::before {
     opacity: 0.7;
@@ -350,4 +354,28 @@
     border-radius: 20px;
     font-weight: bold;
   }
+  
+.add-word-form h3 {
+    color: #3498db; /* Change to a blue color */
+    font-weight: bold; /* Make the text bold */
+}
+
+.word-list li {
+    color: #2c3e50; /* Change to a dark gray color for better visibility */
+    font-weight: normal; /* Adjust font weight if needed */
+    background-color: #f9f9f9; /* Optional: Add a light background for contrast */
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.word-list h3 {
+    color: #e74c3c; /* Change to a red color for emphasis */
+    font-weight: bold; /* Make the text bold */
+}
+
+.dashboard-container h1 {
+    color: #2c3e50; /* Change to a dark gray color */
+    font-weight: bold; /* Keep the text bold */
+}
   

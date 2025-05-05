@@ -12,6 +12,8 @@ const bodyParser = require('body-parser');
 const User = require('./models/User');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const adminRoutes = require('./routes/admin');
+const vocabularyRoutes = require('./routes/vocabulary');
 
 dotenv.config();
 
@@ -46,6 +48,10 @@ app.use(cookieSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use('/api/admin', adminRoutes);
+
+app.use('/api/vocabulary', vocabularyRoutes);
 
 // Sign Up Route
 app.post('/api/signup', async (req, res) => {
@@ -87,9 +93,15 @@ app.post('/api/login', async (req, res) => {
 
     res.status(200).json({
         message: 'Login successful',
-        user: { id: user._id, username: user.username, email: user.email },
+        user: {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            isAdmin: user.isAdmin, // ✅ Include admin flag
+        },
         token,
     });
+    
 });
 
 // Protected Route Example

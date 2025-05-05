@@ -1,4 +1,4 @@
-// ==== Profile.jsx ====
+// src/components/Profile.jsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './Profile.css';
@@ -7,30 +7,23 @@ import { Eye, EyeOff } from 'lucide-react';
 const Profile = () => {
     const { user, login } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        currentPassword: '',
-        newPassword: '',
-        confirmNewPassword: '',
-    });
-    const [show, setShow] = useState({
-        current: false,
-        new: false,
-        confirm: false,
-    });
+    const [formData, setFormData] = useState(null); // Start as null
+    const [show, setShow] = useState({ current: false, new: false, confirm: false });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
     useEffect(() => {
-        if (user) {
-            setFormData(prev => ({
-                ...prev,
+        if (user && !formData) {
+            setFormData({
                 username: user.username || '',
                 email: user.email || '',
-            }));
+                currentPassword: '',
+                newPassword: '',
+                confirmNewPassword: ''
+            });
         }
-    }, [user]);
+    }, [user, formData]);
+    
 
     const isValidEmail = (email) => /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,6}$/.test(email);
 
@@ -45,6 +38,8 @@ const Profile = () => {
         e.preventDefault();
         setError('');
         setSuccess('');
+
+        if (!formData) return;
 
         if (formData.email !== user.email && !isValidEmail(formData.email)) {
             setError('Please enter a valid email address');
@@ -96,6 +91,10 @@ const Profile = () => {
             setError('An error occurred. Please try again.');
         }
     };
+
+    if (!user || !formData) return <div className="profile-container"><p>Loading profile...</p></div>;
+
+    
 
     return (
         <div className="profile-container">
@@ -150,7 +149,7 @@ const Profile = () => {
                                     onChange={handleChange}
                                     required
                                 />
-                                <span className="toggle-password" onClick={() => setShow(p => ({ ...p, current: !p.current }))}>
+                                <span className="eye-icon-profile" onClick={() => setShow(p => ({ ...p, current: !p.current }))}>
                                     {show.current ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </span>
                             </div>
@@ -163,7 +162,7 @@ const Profile = () => {
                                     value={formData.newPassword}
                                     onChange={handleChange}
                                 />
-                                <span className="toggle-password" onClick={() => setShow(p => ({ ...p, new: !p.new }))}>
+                                <span className="eye-icon-profile" onClick={() => setShow(p => ({ ...p, new: !p.new }))}>
                                     {show.new ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </span>
                             </div>

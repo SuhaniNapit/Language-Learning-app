@@ -1,3 +1,4 @@
+// ==== App.js ====
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, Navigate, NavLink } from 'react-router-dom';
 import HomePage from './components/HomePage';
