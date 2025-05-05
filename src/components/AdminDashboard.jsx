@@ -13,7 +13,14 @@ const AdminDashboard = () => {
     useEffect(() => {
         fetch('/api/vocabulary')
             .then(res => res.json())
-            .then(data => setWords(data))
+            .then(data => {
+                console.log('Fetched words:', data);
+                if (Array.isArray(data)) {
+                    setWords(data);
+                } else {
+                    console.error('Invalid data format:', data);
+                }
+            })
             .catch(err => console.error('Failed to fetch words', err));
     }, []);
 
@@ -59,7 +66,7 @@ const AdminDashboard = () => {
                 <h3>Vocabulary Words</h3>
                 <ul>
                     {words.map((item, index) => (
-                        <li key={index}><strong>{item.word}</strong>: {item.meaning}</li>
+                        item && item.word ? <li key={index}><strong>{item.word}</strong>: {item.meaning}</li> : null
                     ))}
                 </ul>
             </div>

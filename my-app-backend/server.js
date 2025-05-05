@@ -13,7 +13,7 @@ const User = require('./models/User');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const adminRoutes = require('./routes/admin');
-const vocabularyRoutes = require('./routes/vocabulary');
+const vocabularyRoutes = require('./routes/vocabularyRoutes'); // ✅ Vocabulary route
 
 dotenv.config();
 
@@ -27,7 +27,7 @@ const io = socketIo(server, {
     },
 });
 
-// MongoDB connection
+// ✅ MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -35,7 +35,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error('MongoDB connection error:', err));
 
-// Middleware
+// ✅ Middleware
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true,
@@ -49,9 +49,9 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// ✅ Routes
 app.use('/api/admin', adminRoutes);
-
-app.use('/api/vocabulary', vocabularyRoutes);
+app.use('/api/vocabulary', vocabularyRoutes); // <-- vocabulary route mounted here
 
 // Sign Up Route
 app.post('/api/signup', async (req, res) => {
@@ -97,11 +97,10 @@ app.post('/api/login', async (req, res) => {
             id: user._id,
             username: user.username,
             email: user.email,
-            isAdmin: user.isAdmin, // ✅ Include admin flag
+            isAdmin: user.isAdmin,
         },
         token,
     });
-    
 });
 
 // Protected Route Example
@@ -122,7 +121,7 @@ app.get('/api/protected', authenticateToken, (req, res) => {
     res.json({ message: 'Protected data', user: req.user });
 });
 
-// Socket.io
+// Socket.io setup
 io.on('connection', (socket) => {
     console.log('New user connected');
 
@@ -151,7 +150,6 @@ app.post('/api/forgot-password', async (req, res) => {
         return res.status(404).send('User not found');
     }
 
-    // If the user is found, respond with a success message
     res.status(200).send('Email found. Please enter a new password.');
 });
 
@@ -165,7 +163,6 @@ app.post('/api/reset-password', async (req, res) => {
         return res.status(404).send('User not found');
     }
 
-    // Hash the new password
     user.password = await bcrypt.hash(password, 10);
     await user.save();
 

@@ -58,4 +58,24 @@ button:disabled {
         font-size: 1rem;
     }
 }
+.vocab-practice-container {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+  }
+  
+  .vocab-card {
+    background: #f0f0f0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    display: inline-block;
+    min-width: 300px;
+  }
+  
+  button {
+    margin: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }
   
