@@ -53,8 +53,13 @@ const AuthForm = () => {
             if (response.ok) {
                 if (isLogin) {
                     login(data);
-                    navigate('/dashboard');
+                    if (data.user?.isAdmin) {
+                        navigate('/admin');
+                    } else {
+                        navigate('/dashboard');
+                    }
                 } else {
+            
                     alert('Registration successful! Please login.');
                     setIsLogin(true);
                 }

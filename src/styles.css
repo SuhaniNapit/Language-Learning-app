@@ -5,20 +5,20 @@ body {
     min-height: 100vh;
     background: linear-gradient(to right, #6a11cb, #2575fc);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    color: #fff; /* White text color */
+    color: #fff;
 }
 
 h1 {
     text-align: center;
-    color: #fff; /* White color for main title */
+    color: #fff;
     margin-bottom: 20px;
-    font-size: 2.5em; /* Larger font size */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Shadow for better visibility */
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 h2 {
-    color: #50439e; /* White color for section titles */
-    text-align: center; /* Center align section titles */
+    color: #50439e;
+    text-align: center;
     margin-bottom: 20px;
 }
 
@@ -41,6 +41,7 @@ h2 {
     width: 250px;
     height: 100vh;
     backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
 }
 
 .sidebar ul {
@@ -71,34 +72,36 @@ h2 {
     margin: 1rem;
 }
 
+/* Form styles */
 textarea {
     width: 100%;
     height: 100px;
     margin-bottom: 10px;
-    border: 1px solid #ccc; /* Light border */
-    border-radius: 4px; /* Rounded corners */
-    padding: 10px; /* Padding inside textarea */
-    font-size: 16px; /* Font size */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
 }
 
 button {
     margin-top: 10px;
     padding: 10px 15px;
-    background-color: #ff5722; /* Vibrant button color */
+    background-color: #ff5722;
     color: white;
     border: none;
-    border-radius: 4px; /* Rounded corners */
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 16px; /* Font size */
-    transition: background-color 0.3s; /* Smooth transition */
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #e64a19; /* Darker shade on hover */
+    background-color: #e64a19;
 }
 
+/* Section styles */
 .translator, .vocabulary-practice, .study-room, .chatbot {
-    background: #ffffff; /* White background for components */
+    background: #ffffff;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -106,17 +109,17 @@ button:hover {
 }
 
 .component-title {
-    font-size: 1.8em; /* Title size for components */
-    color: #4a90e2; /* Title color */
+    font-size: 1.8em;
+    color: #4a90e2;
     margin-bottom: 10px;
-    text-align: center; /* Center align component titles */
+    text-align: center;
 }
 
 .component-image {
-    width: 50px; /* Set a smaller width */
-    height: auto; /* Maintain aspect ratio */
-    border-radius: 5px; /* Rounded corners for images */
-    margin-bottom: 10px; /* Space below the image */
+    width: 50px;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
 
 .App {
@@ -135,7 +138,7 @@ header {
 
 header h1 {
     margin: 0;
-    color: #fff; /* Keep the text white */
+    color: #fff;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -157,7 +160,7 @@ header h1 {
 
 .home-page {
     padding: 20px;
-    color: #333; /* Dark text color for visibility */
+    color: #333;
 }
 
 .dashboard {
@@ -175,7 +178,7 @@ header h1 {
 .profile-icon {
     width: 40px;
     height: 40px;
-    background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    background: rgba(255, 255, 255, 0.2);
     color: white;
     border: 2px solid rgba(255, 255, 255, 0.8);
     border-radius: 50%;
@@ -212,7 +215,7 @@ header h1 {
 
 .dropdown-content a,
 .dropdown-content button {
-    color: #50439e; /* Match your theme color */
+    color: #50439e;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
@@ -227,25 +230,14 @@ header h1 {
 
 .dropdown-content a:hover,
 .dropdown-content button:hover {
-    background-color: rgba(106, 17, 203, 0.1); /* Subtle hover effect matching gradient */
+    background-color: rgba(106, 17, 203, 0.1);
 }
 
 .dropdown-content button {
     color: #e74c3c;
 }
 
-/* Add this to close dropdown when clicking outside */
-@media (max-width: 768px) {
-    header {
-        padding: 1rem;
-    }
-    
-    .dropdown-content {
-        right: -10px;
-    }
-}
-
-/* Add these styles for the chatbot */
+/* Chatbot */
 .chatbot-container {
     position: fixed;
     bottom: 20px;
@@ -253,7 +245,6 @@ header h1 {
     z-index: 1000;
 }
 
-/* Ensure the chatbot doesn't overlap with other content */
 @media (max-width: 768px) {
     .chatbot-container {
         bottom: 10px;
@@ -261,18 +252,351 @@ header h1 {
     }
 }
 
-/* Example CSS for sidebar items */
-.sidebar {
-    /* Your existing sidebar styles */
-}
-
+/* Sidebar enhancements */
 .sidebar-item {
-    padding: 10px; /* Adjust padding as needed */
-    color: #333; /* Default text color */
-    transition: background-color 0.3s ease; /* Smooth transition */
+    padding: 10px;
+    color: #333;
+    transition: background-color 0.3s ease;
 }
 
 .sidebar-item:hover {
-    background-color: rgba(0, 0, 0, 0.1); /* Softer hover background color */
-    color: #000; /* Change text color on hover if needed */
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #000;
 }
+
+/* Toggle button */
+.sidebar-toggle {
+    font-size: 20px;      /* Smaller icon size */
+  padding: 6px 10px;    /* Smaller padding */
+  margin: 10px;         /* Adjust spacing if needed */
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
+}
+
+/* Responsive layout and sidebar */
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 250px;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        transition: left 0.3s ease;
+        z-index: 1050;
+        padding: 2rem 1rem;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .sidebar-toggle {
+        display: block;
+    }
+
+    .content {
+        margin-top: 80px;
+        padding: 1rem;
+    }
+
+    .sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .sidebar ul li {
+        margin-bottom: 10px;
+        flex: 1 1 45%;
+        text-align: center;
+    }
+}/* Global styles */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: #fff;
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+    color: #50439e;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.layout {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 768px) {
+    .layout {
+        flex-direction: row;
+    }
+}
+
+.sidebar {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    width: 250px;
+    height: 100vh;
+    backdrop-filter: blur(5px);
+    transition: left 0.3s ease;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #09012b;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.sidebar ul li a:hover {
+    opacity: 1;
+}
+
+.content {
+    flex: 1;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    margin: 1rem;
+}
+
+/* Responsive Sidebar Toggle */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 1.2rem;
+    left: 0.001rem;
+    z-index: 1100;
+    background: none;       /* Remove background */
+    color: #3d2c9b;            /* White icon for dark header */
+    border: none;           /* Remove border */
+    padding: 0;             /* Remove padding */
+    font-size: 24px;        /* Adjust size as needed */
+    cursor: pointer;
+}
+
+
+
+
+
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        display: flex;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 250px;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        padding: 2rem 1rem;
+        z-index: 1050;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .content {
+        margin-top: 80px;
+        padding: 1rem;
+    }
+}
+
+/* Sidebar item style */
+.sidebar-item {
+    padding: 10px;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #000;
+}
+
+/* Components */
+.translator, .vocabulary-practice, .study-room, .chatbot {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.component-title {
+    font-size: 1.8em;
+    color: #4a90e2;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.component-image {
+    width: 50px;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.App {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    margin: 0;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.get-started-button {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 10px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.get-started-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.home-page {
+    padding: 20px;
+    color: #333;
+}
+
+.dashboard {
+    padding: 20px;
+}
+
+.header-right {
+    position: relative;
+}
+
+.profile-menu {
+    position: relative;
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.profile-icon:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background-color: rgba(255, 255, 255, 0.95);
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+.dropdown-content a,
+.dropdown-content button {
+    color: #50439e;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.dropdown-content a:hover,
+.dropdown-content button:hover {
+    background-color: rgba(106, 17, 203, 0.1);
+}
+
+.dropdown-content button {
+    color: #e74c3c;
+}
+
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+@media (max-width: 768px) {
+    .chatbot-container {
+        bottom: 10px;
+        right: 10px;
+    }
+}
+

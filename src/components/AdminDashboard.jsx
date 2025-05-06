@@ -63,7 +63,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="word-list">
-                <h3>Vocabulary Words</h3>
+                
                 <ul>
                     {words.map((item, index) => (
                         item && item.word ? <li key={index}><strong>{item.word}</strong>: {item.meaning}</li> : null

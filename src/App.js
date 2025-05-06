@@ -16,6 +16,7 @@ import AdminDashboard from './components/AdminDashboard';
 import './styles.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+
 function AppRoutes() {
     const { isLoggedIn, user, logout } = useAuth();
 
@@ -43,8 +44,8 @@ function AppRoutes() {
                                 {user?.username?.charAt(0).toUpperCase() || 'U'}
                             </div>
                             <div id="profile-dropdown" className="dropdown-content">
-                                <Link to="/profile">My Profile</Link>
-                                <Link to="/dashboard">Dashboard</Link>
+                                {!user?.isAdmin && <Link to="/profile">My Profile</Link>}
+                                {!user?.isAdmin && <Link to="/dashboard">Dashboard</Link>}
                                 {user?.isAdmin && <Link to="/admin">Admin Panel</Link>}
                                 <button onClick={logout}>Logout</button>
                             </div>
@@ -53,6 +54,12 @@ function AppRoutes() {
                         <Link to="/auth" className="get-started-button">Get Started</Link>
                     )}
                 </div>
+                <button className="sidebar-toggle" onClick={() => {
+    document.querySelector('.sidebar')?.classList.toggle('open');
+}}>
+    ☰
+</button>
+
             </header>
 
             <div className="layout">
@@ -61,11 +68,20 @@ function AppRoutes() {
                         <li><NavLink to="/" end>Home</NavLink></li>
                         {isLoggedIn ? (
                             <>
-                                <li><NavLink to="/dashboard">Dashboard</NavLink></li>
-                                <li><NavLink to="/translator">Translator</NavLink></li>
-                                <li><NavLink to="/vocabulary">Vocabulary Practice</NavLink></li>
-                                <li><NavLink to="/study-room">Vocabulary Quiz</NavLink></li>
-                                {user?.isAdmin && <li><NavLink to="/admin">Admin Panel</NavLink></li>}
+                                {!user?.isAdmin && (
+                                    <>
+                                        <li><NavLink to="/dashboard">Dashboard</NavLink></li>
+                                        <li><NavLink to="/translator">Translator</NavLink></li>
+                                        <li><NavLink to="/vocabulary">Vocabulary Practice</NavLink></li>
+                                        <li><NavLink to="/study-room">Vocabulary Quiz</NavLink></li>
+                                    </>
+                                )}
+                                {user?.isAdmin && (
+                                    <>
+                                        <li><NavLink to="/vocabulary">Vocabulary Practice</NavLink></li>
+                                        <li><NavLink to="/admin">Admin Panel</NavLink></li>
+                                    </>
+                                )}
                             </>
                         ) : (
                             <li><NavLink to="/auth">Login / Sign Up</NavLink></li>
@@ -78,13 +94,25 @@ function AppRoutes() {
                         <Route path="/" element={<HomePage />} />
                         <Route path="/auth" element={<AuthForm />} />
                         <Route path="/forgot-password" element={<ForgotPassword />} />
-                        <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/auth" />} />
-                        <Route path="/translator" element={isLoggedIn ? <Translator /> : <Navigate to="/auth" />} />
+
+                        {/* Shared */}
                         <Route path="/vocabulary" element={isLoggedIn ? <VocabularyPractice /> : <Navigate to="/auth" />} />
-                        <Route path="/study-room" element={isLoggedIn ? <VocabularyQuiz /> : <Navigate to="/auth" />} />
-                        <Route path="/admin" element={isLoggedIn && user?.isAdmin ? <AdminDashboard /> : <Navigate to="/auth" />} />
-                        <Route path="/chatbot" element={isLoggedIn ? <ElfsightChatbot /> : <Navigate to="/auth" />} />
-                        <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/auth" />} />
+
+                        {/* Admin only */}
+                        {user?.isAdmin && (
+                            <Route path="/admin" element={<AdminDashboard />} />
+                        )}
+
+                        {/* Normal user only */}
+                        {!user?.isAdmin && (
+                            <>
+                                <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/auth" />} />
+                                <Route path="/translator" element={isLoggedIn ? <Translator /> : <Navigate to="/auth" />} />
+                                <Route path="/study-room" element={isLoggedIn ? <VocabularyQuiz /> : <Navigate to="/auth" />} />
+                                <Route path="/chatbot" element={isLoggedIn ? <ElfsightChatbot /> : <Navigate to="/auth" />} />
+                                <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/auth" />} />
+                            </>
+                        )}
                     </Routes>
                 </div>
             </div>
